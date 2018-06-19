@@ -170,21 +170,6 @@ object Start {
     TestData.rdd
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //// 수학 함수 math ////
 
     // math.pow() //
@@ -198,6 +183,45 @@ object Start {
     // 소숫점 반올림
 
     var sell1 = math.round(math.pow(int1,double1))
+
+
+    //    while 문 //
+
+    //    조건문의 조건이 참인경우 루프 거짓일 경우 탈출
+
+
+    //  문제 //
+    var priceData = Array(1000.0,1200.0,1300.0,1500.0,10000.0)
+    var promotionRate = 0.2
+    var priceDataSize = priceData.size
+    var i = 0
+
+    while(i < priceDataSize){
+      var promotionEffect = priceData(i) * promotionRate
+      priceData(i) = priceData(i) - promotionEffect
+      i=i+1// 스칼라에서는 전위증가 후위증가 지원안함
+    }
+
+    // for 문 //
+//    다른 언어와 조금 다르다 자세한 설명은 one note
+
+    var priceData1 = Array(1000.0,1200.0,1300.0,1500.0,10000.0)
+    var promotionRate1 = 0.2
+    var priceDataSize1 = priceData1.size
+
+    /*  priceData1 의 어레이 사이즈는 5이다  to 를 사용하게 되면 0부터 증가 하기 때문에 6되기 때문에
+        until 을 사용하여 0~4 까지 5번 값을 대입 한다  */
+    for(i <-0 until priceDataSize1){
+      var promotionEffect = priceData1(i) * promotionRate1
+      priceData(i) = priceData(i) - promotionEffect
+    }
+
+
+
+
+
+
+
 
   }
 
