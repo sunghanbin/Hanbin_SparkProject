@@ -25,6 +25,28 @@ object FunctionCollection {
 
 
 
+    // 함수화 하기 //
+
+    //  함수이름         (변수들어오는곳:타입) : 리턴될때 변수타입
+    def discountedPrice(price:Double, rate:Double) :Double = {
+      /* 함수 실행 코드 */
+      var discount = price * rate
+      var returnValue = price - discount
+      //      값
+      returnValue
+    }
+    //    함수 사용하기
+    var orgrRate = 0.2
+    var orgPrice = 2000
+    var newrPrice =
+    //      함수이름        (넣어줄 변수)
+      discountedPrice(orgPrice,orgrRate)
+
+
+    /////////////////////////////////////////////////////////////////////////
+
+
+
     ///// Sliding /////
 
     //  분할 해준다
@@ -39,6 +61,14 @@ object FunctionCollection {
     //////////////////
 
 
+    /////// SPARK.SQL ////
+
+//    SPARK에서 SQL문 사용하기
+//    따옴표 안에 SQL문을 작성해 주면 된다
+
+    var data1 = spark.sql("select regionid, productgroup, yearweek, cast(qty as double)" +
+      "from maindata")
+//    from 에서는 데이터 프레임 의 테이블이 아닌 TempView 테이블을 입력해 준다
   }
 
 
