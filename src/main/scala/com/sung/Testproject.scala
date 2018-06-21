@@ -102,18 +102,9 @@ object Testproject {
 
     var x = yearweek6D.first
 
+    var yearweek = x.getString(yearweekNo)
 
-    var yearweek6DG = TestRdd.filter(x=>{
 
-      var checkValid = true
-
-      var yearweek = x.getString(yearweekNo)
-
-      if(yearweek.length != 6){
-        checkValid = false
-      }
-      checkValid
-    })
 
 
 
