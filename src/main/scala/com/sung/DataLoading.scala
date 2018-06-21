@@ -26,9 +26,9 @@ object DataLoading {
 
    // 절대 경로 //하드코딩??
 
-    var TestData2 = spark.read.format("csv").option("header","true").option("Delimiter",";").load("c:/spark/bin/data/"+File)
+    var TestData2 = spark.read.format("csv").option("header","true").load("c:/spark/bin/data/"+File)
                                                                      // ; 로 나눈다
-    // 메모리 테이블 생성
+    // 메모리 테이블 생성.option("Delimiter",";")
 
     TestData2.createOrReplaceTempView("TestTable")
 

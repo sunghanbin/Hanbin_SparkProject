@@ -80,8 +80,8 @@ object Start {
 
     // 원하는 문자 뽑아내기
 
-    dunkin = dunkindonuts.substring(0,2)
-    donuts = dunkindonuts.substring(5,8)
+     dunkin = dunkindonuts.substring(0,2)
+     donuts = dunkindonuts.substring(5,8)
 
     // 특정 구분자(delimeter) 활용하여 필요한 내용 추출
 
@@ -136,7 +136,7 @@ object Start {
     // 리스트 삭제
 
     // filter 함수 true 는 통과 하여 남는다
-    momolist = momolist.filter(x=>{x!=minMOmo})
+    var momolist1 = momolist.filter(x=>{x!=minMOmo})
 
     //리스트 정렬
 
@@ -251,15 +251,85 @@ object Start {
 
 
 
+//////////////////////////////////////////////////////////////////////
 
 
 
-//////////////////////// 데이터 //////////////////////////////////////////
 
-//    데이터 타입 확인
+///////////////// 데이터 프레임 다루기 ///////////////////////////////////
 
 //  데이터프레임명.schema
     selloutData.schema
+
+//    컬럼인덱스 생성
+//    .indexsOf("")
+//    WHy? 컬럼위치가 변경되더라도 위치에 대한 정보를 계속 유지하기 위함
+
+//                    = 데이터의 컬럼을 변수에 담는다
+    var indexsColumns = TestData2.columns
+
+
+//  인덱스 컬럼 이름 = 컬럼을담은변수.인덱스 생성 해주는 명령어(기존 컬럼 이름)
+    var RegionidNo = indexsColumns.indexOf("REGIONID") // 0번 인덱스가 되는것이다
+    var ProductgroupNo = indexsColumns.indexOf("PRODUCTGROUP")
+    var YearweekNo = indexsColumns.indexOf("YEARWEEK")
+    var QtyNo = indexsColumns.indexOf("QTY")
+
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+///////////////////// RDD다루기 /////////////////////////////////////////
+
+//    DataFrame ==> RDD 변환
+//    .rdd
+
+//            = RDD로 변환할 데이터프레임.rdd
+    var RddGo = indexsColumns.rdd
+
+
+
+
+/////// RDD 정제연산 ///////
+
+// 코드 분석
+
+
+/* RddGo.filter RddGo 에 있는 정보를  x에 담아 밀어 넣는다*/
+    var filterexRdd = TestData2.filter(x=> {
+      // 데이터 한줄씩 들어옴 => [A01,PRODUCT62,201632,16827.0000000000]
+
+      var checkValid = true
+
+      var yearweek = x.getString(yearweekNo)
+//                 = yearweekNo 에 있는 값을  x.getString 문자열로 가져오겠다
+      //                                    x.Double 숫자로
+
+      if(yearweek.length != 6){checkValid = false}
+      checkValid              // if 문을 타고 들어온 값은  삭제 한다  chekValid = false
+    })
+
+
+//    디버깅 하기
+    /*기존 데이터 를 유지하기 위해 테스트 용 데이터를 변수 에 담아준다*/
+    var deBugRdd = BasicRdd
+
+    /*하나의 값을  x 변수에 담아  준다*/
+    var deBugRdd2 = deBugRdd.first
+
+    /*디버그 해볼 코드를 실행 한다 */
+
+    var yearweek = x.getString(yearweekNo)
+
+
+
+
+
+
+
+
+    ////////////////////////////////
 
 
 
