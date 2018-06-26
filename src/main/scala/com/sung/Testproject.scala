@@ -1,6 +1,8 @@
 package com.sung
 
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.catalyst.expressions.Round
+import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
 import org.apache.zookeeper.Op.Create
 
 object Testproject {
@@ -103,6 +105,60 @@ object Testproject {
     var x = yearweek6D.first
 
     var yearweek = x.getString(yearweekNo)
+
+
+//     정제 연산 연주차 정보 52 보다 큰값 제거
+
+    var week52ft = TestRdd.filter(x=>{
+
+      var Check = false // 기본 데이터들을 버리고 시작 if 문을 타고 들어가면 check true 를 만나 if 문을 타고 들어간 데이터 만 남는다.
+
+      var yearweek = x.getString(yearweekNo)
+
+      var week = yearweek.substring(4).toInt
+
+      if(week < 52){
+        Check = true
+      }
+      Check
+    })
+
+
+//    상품정보가 product1,2 인 정보만 필터링
+
+    var productArray = Array("PRODUCT1","PRODUCT2").toSet// Set 타입으로 변환 집합타입
+
+    var product1_2 = TestRdd.filter(x=>{
+
+      var Check = false
+      var qty = math.round(x.getDouble(qtyNo)).toDouble
+
+      var product = x.getString(productNo)
+
+      if(productArray.contains(product)){// 집합의 원소를 검사할수있는 contains 를 사용하여 if 문 통과 시키기
+        Check = true
+      }
+      Check
+    })
+
+
+
+
+//    RDD -> DataFrame 변경
+// 사용할때 import 해야함
+// import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
+
+    var EndDf = spark.createDataFrame(week52ft,StructType
+    (
+        Seq(
+          StructField("regionid",StringType),
+          StructField("product",StringType),
+          StructField("yearweek",StringType),
+          StructField("qty",DoubleType)
+        )
+      ))
+
+
 
 
 

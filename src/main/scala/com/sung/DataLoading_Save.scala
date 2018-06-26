@@ -5,7 +5,7 @@ import org.apache.spark
 import org.apache.spark.sql.SparkSession
 
 
-object DataLoading {
+object DataLoading_Save {
 
   /////////////////spark 연동 /////////////////////////
   def main(args: Array[String]): Unit = {

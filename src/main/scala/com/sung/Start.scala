@@ -1,6 +1,8 @@
 package com.sung
 ////////////// spark 연동 라이브러리 //////////
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringType
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types.{StructField, StructType}
 
 object Start {
   /////////////////spark 연동 /////////////////////////
@@ -24,6 +26,7 @@ object Start {
 
 
 ////////////////////////////////////////
+
 
 
     //// Scala 변수선언 ////
@@ -107,6 +110,27 @@ object Start {
     // 문자열 -> 숫자
 
     var intinting = intStr.toDouble
+
+    //  set  타입중 하나로 집합을 뜻한다 집합은 중복 값이 없어야하며 순서는 상관없다
+
+    // 빈 집합 생성
+    var binSet = Set.empty
+
+    // 집합 생성
+    var goSet = Set(1,10,100,1000,10000)
+
+    // 집합 add
+
+    goSet += 12
+
+    // 집합 remove
+
+    goSet -= 12
+
+
+    // contains
+   //  포함 하고 있는 원소 를 검사
+
 
 
     //// 리스트 (어레이보다 리스트가 속도 빠름).. 삭제와 추가 가능 하나 기존내용을 변경 하는 update 는 불가능////
@@ -330,6 +354,21 @@ object Start {
 
 
     ////////////////////////////////
+
+
+///////////////////////////// RDD -> Dataframe ///////////////////////////////
+                                            // 변경할 RDD
+    val DataFrameGo = spark.createDataFrame(RddGo,
+      StructType(
+        Seq(
+          StructField("KEY",StringType),
+          StructField("REGIONID",StringType),
+          StructField("PRODUCT",StringType),
+          StructField("YEARWEEK",StringType),
+          StructField("VOLUME",StringType)
+
+        )
+      ))
 
 
 
