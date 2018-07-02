@@ -1,6 +1,6 @@
 package com.sung
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.sql.catalyst.expressions.Round
 import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
 import org.apache.zookeeper.Op.Create
@@ -19,24 +19,38 @@ object Testproject {
     var staticUrl = "jdbc:oracle:thin:@192.168.110.112:1521/orcl"
     var staticUser = "kopo"
     var staticPw = "kopo"
-    var selloutDb = "KOPO_CHANNEL_SEASONALITY_NEW_A01"
+    var seasonality = "KOPO_CHANNEL_SEASONALITY_NEW"
+    var master = "kopo_product_master"
 
 
-    var TestDataFrame = spark.read.format("jdbc").
-      options(Map("url"->staticUrl,"dbtable"->selloutDb,"user"->staticUser,"password"->staticPw)).load
+    var seasonalityDf = spark.read.format("jdbc").
+      options(Map("url"->staticUrl,"dbtable"->seasonality,"user"->staticUser,"password"->staticPw)).load
+
+    var masterDf = spark.read.format("jdbc").
+      options(Map("url"->staticUrl,"dbtable"->master,"user"->staticUser,"password"->staticPw)).load
 
 
-//     데이터 프레임 확인
-    TestDataFrame.show(1)
+
+    //     데이터 프레임 확인
+    seasonalityDf.show(1)
+    masterDf.show(1)
 
 
 //     tempView 생성
 
-    TestDataFrame.createOrReplaceTempView("TestTableView")
+    seasonalityDf.createOrReplaceTempView("seasonalityTem")
+    masterDf.createOrReplaceTempView("masterTem")
 
-//   TempView 담기
+// join 하면서 담 테이블에 담기
 
-    var TestTable = spark.sql("select * from TestTableView")
+    var joinTable = spark.sql("select B.*,A.PRODUCTNAME " +
+                              "FROM masterTem A " +
+                              "INNER JOIN seasonalityTem B " +
+                              "ON A.PRODUCTID = B.PRODUCT")
+
+    //   TempView 담기
+
+//    var TestTable = spark.sql("select * from TestTableView")
 
 
 //    TempView Table 확인
@@ -71,6 +85,19 @@ object Testproject {
 
 //    전체 확인
     TestRdd.collect.foreach(println)
+
+//    round 처리
+
+    var yearRound = TestRdd.filter(x=>{
+      var checkValid1 = true
+
+      var Rounds = x.getDouble(qtyNo)
+
+      var Round1 = math.round(Rounds)
+
+      checkValid1
+
+    })
 
 
 
@@ -140,6 +167,31 @@ object Testproject {
       }
       Check
     })
+
+
+//    Rdd 가공 연산
+    var RddRow = TestRdd.map(x=>{
+      var qty = x.getDouble(qtyNo)
+      var qty1 = math.round(qty)
+      if(qty1 > 20000){ qty1 = 30000}
+      Row(x.getString(resionidNo),
+        x.getString(productNo),
+        x.getString(yearweekNo),
+        qty1)
+    })
+
+    RddRow.first
+
+    var Rddbasic = TestRdd.map(x=>{
+      var qty = x.getDouble(qtyNo)
+      if(qty > 700000){ qty = 700000}
+      Row(x.getString(resionidNo),
+        x.getString(productNo),
+        x.getString(yearweekNo),
+        qty)
+    })
+
+    Rddbasic.first
 
 
 
